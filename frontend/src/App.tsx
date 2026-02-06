@@ -10,6 +10,8 @@ import TeacherDashboard from './pages/teacher/TeacherDashboard';
 import { StockMarketPage } from './pages/stock-market/StockMarketPage';
 import RealEstatePage from './pages/real-estate/RealEstatePage';
 import BankPage from './pages/bank/BankPage';
+import MallPage from './pages/mall/MallPage';
+import EventsPage from './pages/Events';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 
 const App: React.FC = () => {
@@ -127,6 +129,18 @@ const App: React.FC = () => {
           <Route path="/bank" element={
             <ProtectedRoute>
               <BankPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/mall" element={
+            <ProtectedRoute>
+              <MallPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/events" element={
+            <ProtectedRoute>
+              <EventsPage />
             </ProtectedRoute>
           } />
           

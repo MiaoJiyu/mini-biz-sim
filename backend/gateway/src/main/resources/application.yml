@@ -1,0 +1,79 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=2
+            - name: AuthFilter
+
+        - id: stock-service
+          uri: lb://stock-service
+          predicates:
+            - Path=/api/stocks/**
+          filters:
+            - StripPrefix=2
+            - name: RateLimitFilter
+              args:
+                rateLimit: 50
+                timeWindow: 60
+
+        - id: real-estate-service
+          uri: lb://real-estate-service
+          predicates:
+            - Path=/api/real-estate/**
+          filters:
+            - StripPrefix=2
+
+        - id: bank-service
+          uri: lb://bank-service
+          predicates:
+            - Path=/api/bank/**
+          filters:
+            - StripPrefix=2
+
+        - id: mall-service
+          uri: lb://mall-service
+          predicates:
+            - Path=/api/mall/**
+          filters:
+            - StripPrefix=2
+
+        - id: event-service
+          uri: lb://event-service
+          predicates:
+            - Path=/api/events/**
+          filters:
+            - StripPrefix=2
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+
+logging:
+  level:
+    com.financelab: DEBUG
+    org.springframework.cloud.gateway: DEBUG

@@ -1,12 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
+import { TourGuide, TutorialProgress } from '../components/TourGuide';
+import OnboardingModal from '../components/OnboardingModal';
+import { Button } from '@/components/ui/button';
+import { Sparkles } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  
+  const [showTour, setShowTour] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [tutorialProgress, setTutorialProgress] = useState({ completed: 0, total: 5 });
+
+  useEffect(() => {
+    const hasCompletedTutorial = localStorage.getItem('hasCompletedTutorial');
+    if (!hasCompletedTutorial) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
   const handleLogout = () => {
     authService.logout();
+    navigate('/login');
+  };
+
+  const tourSteps = [
+    {
+      id: 'overview',
+      title: '欢迎来到财商学堂!',
+      description: '这里展示您的资产概览和账户信息,了解您的财务状况从这里开始。',
+      target: '#assets-overview',
+      position: 'bottom' as const
+    },
+    {
+      id: 'quick-actions',
+      title: '快速操作',
+      description: '从这里可以快速访问股票、房产、银行等各个功能模块。',
+      target: '#quick-actions',
+      position: 'right' as const
+    },
+    {
+      id: 'market-news',
+      title: '市场动态',
+      description: '及时了解市场新闻和趋势,帮助您做出明智的投资决策。',
+      target: '#market-news',
+      position: 'top' as const
+    }
+  ];
+
+  const handleCompleteTutorial = () => {
+    setShowTour(false);
+    localStorage.setItem('hasCompletedTutorial', 'true');
+    setTutorialProgress({ ...tutorialProgress, completed: tutorialProgress.completed + 1 });
+  };
+
+  const handleStartTutorial = (stepId: string) => {
+    setShowTour(true);
   };
 
   const navigateToStockMarket = () => {
@@ -21,6 +70,14 @@ const Dashboard: React.FC = () => {
     navigate('/bank');
   };
 
+  const navigateToMall = () => {
+    navigate('/mall');
+  };
+
+  const navigateToEvents = () => {
+    navigate('/events');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
@@ -33,6 +90,14 @@ const Dashboard: React.FC = () => {
               <p className="text-sm text-gray-600">学生仪表盘</p>
             </div>
             <div className="flex items-center space-x-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowOnboarding(true)}
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                新手引导
+              </Button>
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
@@ -45,9 +110,12 @@ const Dashboard: React.FC = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {tutorialProgress.completed < tutorialProgress.total && (
+          <TutorialProgress completed={tutorialProgress.completed} total={tutorialProgress.total} />
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* 资产概览卡片 */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div id="assets-overview" className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">资产概览</h2>
             <div className="space-y-3">
               <div className="flex justify-between">
@@ -85,7 +153,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* 快速操作卡片 */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div id="quick-actions" className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">快速操作</h2>
             <div className="space-y-3">
               <button 
@@ -100,17 +168,29 @@ const Dashboard: React.FC = () => {
               >
                 <span className="font-medium text-green-700">房地产投资</span>
               </button>
-              <button 
+              <button
                 onClick={navigateToBank}
                 className="w-full text-left p-3 bg-purple-50 rounded-md hover:bg-purple-100 transition-all duration-300"
               >
                 <span className="font-medium text-purple-700">银行服务</span>
               </button>
+              <button
+                onClick={navigateToMall}
+                className="w-full text-left p-3 bg-orange-50 rounded-md hover:bg-orange-100 transition-all duration-300"
+              >
+                <span className="font-medium text-orange-700">商场消费</span>
+              </button>
+              <button
+                onClick={navigateToEvents}
+                className="w-full text-left p-3 bg-red-50 rounded-md hover:bg-red-100 transition-all duration-300"
+              >
+                <span className="font-medium text-red-700">事件中心</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div id="market-news" className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* 市场动态 */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">市场动态</h2>
@@ -146,6 +226,19 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </main>
+
+      <TourGuide
+        steps={tourSteps}
+        onComplete={handleCompleteTutorial}
+        onClose={() => setShowTour(false)}
+        show={showTour}
+      />
+
+      <OnboardingModal
+        isOpen={showOnboarding}
+        onClose={() => setShowOnboarding(false)}
+        onStartTutorial={handleStartTutorial}
+      />
     </div>
   );
 };
