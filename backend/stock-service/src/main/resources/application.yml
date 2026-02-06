@@ -1,0 +1,47 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: stock-service
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/financelab_stock?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+  
+  redis:
+    host: localhost
+    port: 6379
+    password: 
+    database: 1
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000 # 5分钟缓存
+
+# 股票配置
+stock:
+  simulation:
+    enabled: true
+    update-interval: 5000 # 5秒更新一次
+    volatility-range: 0.1 # 最大波动范围10%
+
+# 日志配置
+logging:
+  level:
+    com.financelab.stockservice: DEBUG
+    org.springframework.web.socket: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"

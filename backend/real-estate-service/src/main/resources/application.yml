@@ -1,0 +1,42 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: real-estate-service
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/financelab_realestate?useSSL=false&serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    show-sql: true
+  
+  redis:
+    host: localhost
+    port: 6379
+    password: 
+    database: 1
+
+# 房地产服务配置
+real-estate:
+  price-update-interval: 3600000 # 价格更新间隔（毫秒）
+  transaction-fee-rate: 0.01     # 交易费率
+  tax-rate: 0.05                 # 税率
+  max-rental-duration: 36        # 最大租赁时长（月）
+
+# 日志配置
+logging:
+  level:
+    com.financelab.realestateservice: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"

@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: financelab-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: financelab123
+      MYSQL_DATABASE: financelab
+      MYSQL_USER: financelab
+      MYSQL_PASSWORD: financelab123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ../database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - financelab-network
+
+  # Redis缓存
+  redis:
+    image: redis:7.2-alpine
+    container_name: financelab-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - financelab-network
+
+  # API网关
+  gateway:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      target: gateway
+    container_name: financelab-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/financelab
+      - SPRING_DATASOURCE_USERNAME=financelab
+      - SPRING_DATASOURCE_PASSWORD=financelab123
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - financelab-network
+
+  # 用户服务
+  user-service:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      target: user-service
+    container_name: financelab-user-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/financelab
+      - SPRING_DATASOURCE_USERNAME=financelab
+      - SPRING_DATASOURCE_PASSWORD=financelab123
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8081
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - financelab-network
+
+  # 股票服务
+  stock-service:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+      target: stock-service
+    container_name: financelab-stock-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/financelab
+      - SPRING_DATASOURCE_USERNAME=financelab
+      - SPRING_DATASOURCE_PASSWORD=financelab123
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8082
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - financelab-network
+
+  # 前端应用
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: financelab-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080/api
+    depends_on:
+      - gateway
+    networks:
+      - financelab-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  financelab-network:
+    driver: bridge

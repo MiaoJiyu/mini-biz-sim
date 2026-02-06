@@ -1,0 +1,66 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: bank-service
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/financelab_bank?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: financelab_user
+    password: financelab_pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        show_sql: false
+    
+  redis:
+    host: localhost
+    port: 6379
+    password: 
+    database: 0
+
+logging:
+  level:
+    com.financelab.bankservice: DEBUG
+    org.hibernate.SQL: DEBUG
+  
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+bank:
+  settings:
+    max-withdrawal-amount: 50000
+    max-transfer-amount: 100000
+    overdraft-limit: 1000
+    daily-interest-time: "02:00"
+    
+  fees:
+    withdrawal: 0.01
+    transfer: 0.005
+    
+  credit:
+    min-score-for-loan: 600
+    max-loan-amount: 1000000
+    
+  rates:
+    savings: 1.5
+    current: 0.3
+    fixed-deposit: 3.0
+    investment: 2.5
+    credit-card: 18.0
