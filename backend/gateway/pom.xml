@@ -7,7 +7,7 @@
 
     <parent>
         <groupId>com.financelab</groupId>
-        <artifactId>mini-biz-sim</artifactId>
+        <artifactId>financelab-backend</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
