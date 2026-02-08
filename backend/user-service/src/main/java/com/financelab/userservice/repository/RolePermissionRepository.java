@@ -8,18 +8,19 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
-    
+
     List<RolePermission> findByRole(User.UserRole role);
-    
+
     List<RolePermission> findByRoleAndIsEnabledTrue(User.UserRole role);
-    
+
     @Query("SELECT rp FROM RolePermission rp WHERE rp.role = :role AND rp.permissionCode = :permissionCode")
-    Optional<RolePermission> findByRoleAndPermissionCode(@Param("role") User.UserRole role, 
+    Optional<RolePermission> findByRoleAndPermissionCode(@Param("role") User.UserRole role,
                                                         @Param("permissionCode") String permissionCode);
-    
+
     @Query("SELECT rp FROM RolePermission rp WHERE rp.isEnabled = true")
     List<RolePermission> findAllEnabledPermissions();
 }

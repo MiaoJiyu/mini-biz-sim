@@ -1,6 +1,7 @@
 package com.financelab.mallservice.dto;
 
 import com.financelab.mallservice.entity.OrderItem;
+import com.financelab.mallservice.entity.Product;
 import lombok.Data;
 
 import java.math.BigDecimal;

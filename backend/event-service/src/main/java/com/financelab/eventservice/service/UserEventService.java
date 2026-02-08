@@ -62,7 +62,11 @@ public class UserEventService {
             userEvent.setUserChoice(choice);
 
             Map<String, Object> outcome = calculateOutcome(userEvent, choice);
-            userEvent.setOutcome(objectMapper.writeValueAsString(outcome));
+            try {
+                userEvent.setOutcome(objectMapper.writeValueAsString(outcome));
+            } catch (Exception e) {
+                userEvent.setOutcome("{\"error\":\"Failed to serialize outcome\"}");
+            }
 
             return userEventRepository.save(userEvent);
         }

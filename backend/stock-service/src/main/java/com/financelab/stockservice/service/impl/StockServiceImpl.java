@@ -113,11 +113,11 @@ public class StockServiceImpl implements StockService {
             TradeRecord tradeRecord = new TradeRecord();
             tradeRecord.setUserId(tradeRequest.getUserId());
             tradeRecord.setStock(stock);
-            tradeRecord.setTradeType(tradeRequest.getTradeType());
+            tradeRecord.setTradeType(TradeRecord.TradeType.valueOf(tradeRequest.getTradeType().name()));
             tradeRecord.setQuantity(tradeRequest.getQuantity());
             tradeRecord.setPrice(tradePrice);
             tradeRecord.setTotalAmount(totalAmount);
-            tradeRecord.setOrderType(tradeRequest.getOrderType());
+            tradeRecord.setOrderType(TradeRecord.OrderType.valueOf(tradeRequest.getOrderType().name()));
             tradeRecord.setStatus(TradeRecord.TradeStatus.COMPLETED);
             tradeRecord.setTradeTime(LocalDateTime.now());
             
@@ -268,7 +268,7 @@ public class StockServiceImpl implements StockService {
             result.setTradeId(tradeRecord.getId());
             result.setStockCode(tradeRecord.getStock().getCode());
             result.setStockName(tradeRecord.getStock().getName());
-            result.setTradeType(tradeRecord.getTradeType());
+            result.setTradeType(TradeRequestDTO.TradeType.valueOf(tradeRecord.getTradeType().name()));
             result.setQuantity(tradeRecord.getQuantity());
             result.setPrice(tradeRecord.getPrice());
             result.setTotalAmount(tradeRecord.getTotalAmount());

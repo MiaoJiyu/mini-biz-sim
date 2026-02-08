@@ -85,11 +85,18 @@ public class MallServiceImpl implements MallService {
             return products.map(ProductDTO::new);
         } else {
             // 组合查询：类别 + 价格范围
-            Page<Product> products = productRepository.findByCategory(category, pageable).getContent().stream()
+            List<Product> products = productRepository.findByCategory(category, pageable).getContent().stream()
                 .filter(p -> p.getPrice().compareTo(minPrice) >= 0 && p.getPrice().compareTo(maxPrice) <= 0)
                 .toList();
-            // 简化处理，实际应该使用更复杂的查询
-            return Page.empty(pageable);
+            // 转换为 Page 对象
+            int start = (int) pageable.getOffset();
+            int end = Math.min(start + pageable.getPageSize(), products.size());
+            List<Product> pageContent = products.subList(start, end);
+            return new org.springframework.data.domain.PageImpl<>(
+                pageContent,
+                pageable,
+                products.size()
+            ).map(ProductDTO::new);
         }
     }
     

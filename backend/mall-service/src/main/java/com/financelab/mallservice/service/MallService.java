@@ -2,6 +2,7 @@ package com.financelab.mallservice.service;
 
 import com.financelab.mallservice.dto.*;
 import com.financelab.mallservice.entity.Product;
+import com.financelab.mallservice.entity.Order;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

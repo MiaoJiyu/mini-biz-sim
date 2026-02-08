@@ -2,6 +2,7 @@ package com.financelab.gateway.filter;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -12,12 +13,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Component
 public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> {
 
     private static final String JWT_SECRET = "financeLabSecretKey2024";
+    private static final SecretKey key = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
     private static final List<String> PUBLIC_PATHS = List.of(
             "/api/auth/login",
             "/api/auth/register",
@@ -48,9 +52,10 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
 
             try {
                 Claims claims = Jwts.parser()
-                        .setSigningKey(JWT_SECRET)
-                        .parseClaimsJws(token)
-                        .getBody();
+                        .verifyWith(key)
+                        .build()
+                        .parseSignedClaims(token)
+                        .getPayload();
 
                 ServerHttpRequest modifiedRequest = request.mutate()
                         .header("X-User-Id", claims.getSubject())

@@ -7,6 +7,7 @@ import com.financelab.stockservice.entity.StockPriceHistory;
 import com.financelab.stockservice.entity.TradeRecord;
 import com.financelab.stockservice.entity.UserPosition;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface StockService {
