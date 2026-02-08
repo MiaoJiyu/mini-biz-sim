@@ -6,14 +6,14 @@ spring:
     name: stock-service
 
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME_STOCKS:financelab_stocks}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME_STOCKS:financelab_stocks}?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${DB_ROOT_USER:root}
     password: ${DB_ROOT_PASSWORD:password}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${JPA_DDL_AUTO:update}
     show-sql: false
     properties:
       hibernate:
@@ -41,7 +41,7 @@ stock:
 # 日志配置
 logging:
   level:
-    com.financelab.stockservice: DEBUG
-    org.springframework.web.socket: INFO
+    com.financelab.stockservice: ${LOG_LEVEL:INFO}
+    org.springframework.web.socket: WARN
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"

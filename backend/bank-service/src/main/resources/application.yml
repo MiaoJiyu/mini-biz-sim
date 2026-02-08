@@ -6,14 +6,14 @@ spring:
     name: bank-service
 
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME_BANK:financelab_bank}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME_BANK:financelab_bank}?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${DB_ROOT_USER:root}
     password: ${DB_ROOT_PASSWORD:password}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${JPA_DDL_AUTO:update}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -28,8 +28,8 @@ spring:
 
 logging:
   level:
-    com.financelab.bankservice: DEBUG
-    org.hibernate.SQL: DEBUG
+    com.financelab.bankservice: ${LOG_LEVEL:INFO}
+    org.hibernate.SQL: WARN
 
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -38,10 +38,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health
   endpoint:
     health:
-      show-details: always
+      show-details: when-authorized
 
 bank:
   settings:

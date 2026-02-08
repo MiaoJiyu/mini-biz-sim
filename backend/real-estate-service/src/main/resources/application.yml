@@ -6,14 +6,14 @@ spring:
     name: real-estate-service
 
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME_REALESTATE:financelab_realestate}?useSSL=false&serverTimezone=UTC&characterEncoding=utf8
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME_REALESTATE:financelab_realestate}?useSSL=true&serverTimezone=UTC&characterEncoding=utf8
     username: ${DB_ROOT_USER:root}
     password: ${DB_ROOT_PASSWORD:password}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${JPA_DDL_AUTO:update}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -36,7 +36,7 @@ real-estate:
 # 日志配置
 logging:
   level:
-    com.financelab.realestateservice: DEBUG
-    org.hibernate.SQL: DEBUG
+    com.financelab.realestateservice: ${LOG_LEVEL:INFO}
+    org.hibernate.SQL: WARN
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"

@@ -36,9 +36,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/validate-token").permitAll()
                 .requestMatchers("/api/users/**").authenticated()
                 .anyRequest().authenticated()
-            )
-            .httpBasic(httpBasic -> {});
-        
+            );
+
         return http.build();
     }
     
