@@ -8,14 +8,14 @@ spring:
     name: user-service
 
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME_USERS:financelab_users}?useSSL=false&serverTimezone=UTC&characterEncoding=utf8
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME_USERS:financelab_users}?useSSL=true&serverTimezone=UTC&characterEncoding=utf8
     username: ${DB_ROOT_USER:root}
     password: ${DB_ROOT_PASSWORD:password}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${JPA_DDL_AUTO:update}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -34,5 +34,5 @@ jwt:
 
 logging:
   level:
-    com.financelab.userservice: DEBUG
-    org.springframework.security: DEBUG
+    com.financelab.userservice: ${LOG_LEVEL:INFO}
+    org.springframework.security: WARN
