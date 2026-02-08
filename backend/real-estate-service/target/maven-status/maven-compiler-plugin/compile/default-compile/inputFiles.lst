@@ -1,0 +1,17 @@
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/RealEstateServiceApplication.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/config/DataInitializer.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/controller/RealEstateController.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/dto/CityDTO.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/dto/PropertyDTO.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/dto/PropertyTransactionDTO.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/entity/City.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/entity/Property.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/entity/PropertyPriceHistory.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/entity/PropertyTransaction.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/repository/CityRepository.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/repository/PropertyPriceHistoryRepository.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/repository/PropertyRepository.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/repository/PropertyTransactionRepository.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/service/PropertyPriceSimulator.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/service/RealEstateService.java
+/opt/mini-biz-sim/backend/real-estate-service/src/main/java/com/financelab/realestateservice/service/impl/RealEstateServiceImpl.java

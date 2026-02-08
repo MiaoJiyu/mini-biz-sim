@@ -20,6 +20,6 @@ public interface StockPriceHistoryRepository extends JpaRepository<StockPriceHis
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime);
     
-    @Query("SELECT sph FROM StockPriceHistory sph WHERE sph.stock.id = :stockId AND sph.type = 'CLOSE' ORDER BY sph.timestamp DESC LIMIT 30")
+    @Query(value = "SELECT * FROM stock_price_history WHERE stock_id = :stockId AND type = 'CLOSE' ORDER BY timestamp DESC LIMIT 30", nativeQuery = true)
     List<StockPriceHistory> findLast30DaysClosePrices(@Param("stockId") Long stockId);
 }

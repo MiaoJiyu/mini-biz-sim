@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -36,6 +37,7 @@ public class PropertyPriceSimulator {
      * 每小时更新一次房产价格
      */
     @Scheduled(fixedRate = 3600000) // 1小时
+    @Transactional
     public void updatePropertyPrices() {
         log.info("开始更新房产市场价格...");
         
@@ -50,6 +52,14 @@ public class PropertyPriceSimulator {
         }
         
         log.info("房产市场价格更新完成，共更新 {} 处房产", updatedCount);
+    }
+    
+    /**
+     * 手动触发价格更新（用于测试）
+     */
+    @Transactional
+    public void manualPriceUpdate() {
+        updatePropertyPrices();
     }
     
     /**
@@ -148,12 +158,5 @@ public class PropertyPriceSimulator {
         }
         
         priceHistoryRepository.save(history);
-    }
-    
-    /**
-     * 手动触发价格更新（用于测试）
-     */
-    public void manualPriceUpdate() {
-        updatePropertyPrices();
     }
 }

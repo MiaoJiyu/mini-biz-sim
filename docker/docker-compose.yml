@@ -45,6 +45,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=financelab123
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
+      - JWT_SECRET=FinanceLab2024SecureSecretKeyForHS256AlgorithmMinimum32BytesLong
     depends_on:
       - mysql
       - redis
@@ -66,6 +67,7 @@ services:
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
       - SERVER_PORT=8081
+      - JWT_SECRET=FinanceLab2024SecureSecretKeyForHS256AlgorithmMinimum32BytesLong
     depends_on:
       - mysql
       - redis

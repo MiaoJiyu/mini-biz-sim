@@ -1,0 +1,15 @@
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/EventServiceApplication.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/config/WebSocketConfig.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/controller/EventController.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/controller/UserEventController.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/entity/Event.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/entity/EventChoice.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/entity/EventSeverity.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/entity/EventType.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/entity/UserEvent.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/repository/EventChoiceRepository.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/repository/EventRepository.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/repository/UserEventRepository.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/scheduler/EventScheduler.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/service/EventService.java
+/opt/mini-biz-sim/backend/event-service/src/main/java/com/financelab/eventservice/service/UserEventService.java

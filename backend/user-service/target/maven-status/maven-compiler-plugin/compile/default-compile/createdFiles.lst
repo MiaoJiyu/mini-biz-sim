@@ -1,0 +1,14 @@
+com/financelab/userservice/dto/RegisterRequest.class
+com/financelab/userservice/repository/RolePermissionRepository.class
+com/financelab/userservice/UserServiceApplication.class
+com/financelab/userservice/dto/LoginRequest.class
+com/financelab/userservice/entity/User.class
+com/financelab/userservice/repository/UserRepository.class
+com/financelab/userservice/config/SecurityConfig.class
+com/financelab/userservice/service/UserService.class
+com/financelab/userservice/service/impl/UserServiceImpl.class
+com/financelab/userservice/service/impl/JwtTokenProvider.class
+com/financelab/userservice/dto/UpdateUserRequest.class
+com/financelab/userservice/controller/UserController.class
+com/financelab/userservice/entity/RolePermission.class
+com/financelab/userservice/entity/User$UserRole.class

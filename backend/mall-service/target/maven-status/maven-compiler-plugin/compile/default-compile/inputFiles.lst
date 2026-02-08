@@ -1,0 +1,17 @@
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/MallServiceApplication.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/config/DataInitializer.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/controller/MallController.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/dto/CartItemDTO.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/dto/OrderDTO.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/dto/OrderItemDTO.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/dto/ProductDTO.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/entity/CartItem.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/entity/Order.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/entity/OrderItem.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/entity/Product.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/repository/CartItemRepository.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/repository/OrderItemRepository.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/repository/OrderRepository.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/repository/ProductRepository.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/service/MallService.java
+/opt/mini-biz-sim/backend/mall-service/src/main/java/com/financelab/mallservice/service/impl/MallServiceImpl.java

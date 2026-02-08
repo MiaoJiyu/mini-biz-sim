@@ -22,11 +22,14 @@ mvn clean package -DskipTests # Build JAR files without tests
 
 ### Database Setup
 ```bash
-mysql -u root -p < database/01_users.sql
-mysql -u root -p < database/02_stocks.sql
-mysql -u root -p < database/03_realestate.sql
-mysql -u root -p < database/04_bank.sql
-mysql -u root -p < database/05_mall.sql
+# 方式一: 使用统一的初始化脚本 (推荐)
+mysql -u root -p < database/init.sql
+
+# 方式二: 按服务分别执行 (如果使用独立数据库)
+mysql -u root -p < database/stock-service.sql
+mysql -u root -p < database/real-estate-service.sql
+mysql -u root -p < database/bank-service.sql
+mysql -u root -p < database/mall-service.sql
 mysql -u root -p < database/06_events.sql
 ```
 

@@ -1,153 +1,31 @@
-# Java / Maven
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
-
-# Spring Boot
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-# IDE - IntelliJ IDEA
-.idea/
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-# IDE - Eclipse
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-# IDE - VS Code
-.vscode/
-*.code-workspace
-.history/
-
-# Node.js / Frontend
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-.pnpm-debug.log*
-dist/
-dist-ssr/
-*.local
-
-# React / Vite
-.vite/
-coverage/
-*.tsbuildinfo
-
-# Logs
-logs/
-*.log
-log/
-
-# OS
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Docker
+# 环境变量文件 - 包含敏感信息，不要提交到版本控制
 .env
 .env.local
 .env.*.local
-docker-compose.override.yml
 
-# Temporary files
-*.tmp
-*.temp
+# Backend
+backend/target/
+backend/.springBeans
+backend/.spring-boot-devtools.properties
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.turbo/
+
+# IDE
+.idea/
+*.iml
+.vscode/
 *.swp
 *.swo
 *~
-.cache/
 
-# Application specific
-application-local.yml
-application-dev-local.yml
-application-test-local.yml
-data/
-uploads/
-*.pid
-*.seed
-*.pid.lock
+# OS
+.DS_Store
+Thumbs.db
 
-# Testing
-.nyc_output/
-grunt
-lcov
-.nyc_output/
-.coverage
-.coverage.*
-coverage/
-!**/src/main/**/coverage/
-
-# Build outputs
-build/
-out/
-target/
-bin/
-obj/
-lib/
-
-# Package files
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# Documentation
-docs/_build/
-docs/site/
-
-# Misc
-.cache
-.project
-.classpath
-.settings/
-.vscode/
-*.sublime-project
-*.sublime-workspace
-
-# Security
-*.pem
-*.key
-*.crt
-*.p12
-*.jks
-keystore.p12
-secrets/
-credentials/
+# Logs
+*.log
+logs/

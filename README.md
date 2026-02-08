@@ -71,9 +71,30 @@ npm run dev
 ### 后端启动
 
 ```bash
-cd backend
-./mvnw spring-boot:run
+# 方法一: 使用启动脚本（推荐）
+# 该脚本会自动加载 .env 文件中的环境变量
+cd /opt/mini-biz-sim
+./run-service.sh gateway      # 启动网关服务
+./run-service.sh user-service # 启动用户服务
+./run-service.sh stock-service # 启动股票服务
+./run-service.sh real-estate-service # 启动房地产服务
+./run-service.sh bank-service # 启动银行服务
+./run-service.sh mall-service # 启动商场服务
+./run-service.sh event-service # 启动事件服务
+
+# 方法二: 直接使用Maven启动
+cd backend/gateway
+mvn spring-boot:run
 ```
+
+### 环境变量配置
+
+项目根目录下的 `.env` 文件包含所有环境变量配置，包括：
+- 数据库连接信息（DB_HOST, DB_PORT, DB_ROOT_PASSWORD等）
+- JWT密钥（JWT_SECRET）
+- Redis配置（REDIS_HOST, REDIS_PORT等）
+
+重要提示：密码等敏感信息存储在 `.env` 文件中，不要提交到版本控制。
 
 ## 📖 开发文档
 

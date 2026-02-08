@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -20,25 +21,26 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @Slf4j
 public class StockPriceSimulator {
-    
+
     @Autowired
     private StockRepository stockRepository;
-    
+
     @Autowired
     private StockPriceHistoryRepository priceHistoryRepository;
-    
+
     private final Random random = new Random();
     private final ConcurrentHashMap<String, BigDecimal> lastPrices = new ConcurrentHashMap<>();
-    
+
     @PostConstruct
     public void init() {
         log.info("初始化股票价格模拟器...");
         initializeStockPrices();
     }
-    
+
     /**
      * 初始化股票价格
      */
+    @Transactional
     private void initializeStockPrices() {
         List<Stock> stocks = stockRepository.findAll();
         for (Stock stock : stocks) {
@@ -57,20 +59,21 @@ public class StockPriceSimulator {
         }
         log.info("已初始化 {} 只股票的价格", stocks.size());
     }
-    
+
     /**
      * 每5秒更新一次股票价格（模拟实时行情）
      */
     @Scheduled(fixedRate = 5000)
+    @Transactional
     public void simulatePriceChanges() {
         List<Stock> activeStocks = stockRepository.findByIsActiveTrue();
-        
+
         for (Stock stock : activeStocks) {
             BigDecimal newPrice = calculateNewPrice(stock);
             updateStockPrice(stock, newPrice);
             savePriceHistory(stock, newPrice);
         }
-        
+
         log.debug("已更新 {} 只股票的实时价格", activeStocks.size());
     }
     

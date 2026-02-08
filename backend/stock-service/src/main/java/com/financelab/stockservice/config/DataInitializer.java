@@ -47,7 +47,7 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-    private Stock createStock(String code, String name, String company, String industry, 
+    private Stock createStock(String code, String name, String company, String industry,
                              double price, int volatility) {
         Stock stock = new Stock();
         stock.setCode(code);
@@ -60,10 +60,11 @@ public class DataInitializer implements CommandLineRunner {
         stock.setHighPrice(BigDecimal.valueOf(price));
         stock.setLowPrice(BigDecimal.valueOf(price));
         stock.setVolume(1000000L);
-        stock.setMarketCap(BigDecimal.valueOf(price).multiply(BigDecimal.valueOf(10000000)));
+        // 计算合理的市值（总股本设为相对较小的值以避免超出数据库限制）
+        stock.setMarketCap(BigDecimal.valueOf(price).multiply(BigDecimal.valueOf(1000000))); // 使用100万股而不是1000万股
         stock.setVolatility(volatility);
         stock.setIsActive(true);
-        
+
         return stock;
     }
 }

@@ -1,0 +1,17 @@
+com/financelab/realestateservice/service/RealEstateService.class
+com/financelab/realestateservice/service/PropertyPriceSimulator.class
+com/financelab/realestateservice/repository/CityRepository.class
+com/financelab/realestateservice/entity/PropertyPriceHistory.class
+com/financelab/realestateservice/entity/Property.class
+com/financelab/realestateservice/dto/CityDTO.class
+com/financelab/realestateservice/RealEstateServiceApplication.class
+com/financelab/realestateservice/config/DataInitializer.class
+com/financelab/realestateservice/service/impl/RealEstateServiceImpl.class
+com/financelab/realestateservice/repository/PropertyTransactionRepository.class
+com/financelab/realestateservice/repository/PropertyRepository.class
+com/financelab/realestateservice/repository/PropertyPriceHistoryRepository.class
+com/financelab/realestateservice/dto/PropertyDTO.class
+com/financelab/realestateservice/entity/City.class
+com/financelab/realestateservice/dto/PropertyTransactionDTO.class
+com/financelab/realestateservice/controller/RealEstateController.class
+com/financelab/realestateservice/entity/PropertyTransaction.class

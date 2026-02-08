@@ -48,7 +48,7 @@ public class Stock {
     @Column(nullable = false)
     private Long volume; // 成交量
     
-    @Column(precision = 10, scale = 2, nullable = false)
+    @Column(precision = 15, scale = 2, nullable = false)
     private BigDecimal marketCap; // 市值
     
     @Column(nullable = false)

@@ -14,12 +14,12 @@ public interface PropertyPriceHistoryRepository extends JpaRepository<PropertyPr
     
     List<PropertyPriceHistory> findByPropertyIdOrderByPriceDateDesc(Long propertyId);
     
-    @Query("SELECT pph FROM PropertyPriceHistory pph WHERE pph.propertyId = :propertyId AND pph.priceDate >= :startDate ORDER BY pph.priceDate ASC")
+    @Query("SELECT pph FROM PropertyPriceHistory pph WHERE pph.property.id = :propertyId AND pph.priceDate >= :startDate ORDER BY pph.priceDate ASC")
     List<PropertyPriceHistory> findPriceHistoryByPropertyAndDateRange(@Param("propertyId") Long propertyId, @Param("startDate") LocalDateTime startDate);
     
-    @Query("SELECT pph FROM PropertyPriceHistory pph WHERE pph.propertyId = :propertyId ORDER BY pph.priceDate DESC LIMIT 30")
+    @Query("SELECT pph FROM PropertyPriceHistory pph WHERE pph.property.id = :propertyId ORDER BY pph.priceDate DESC LIMIT 30")
     List<PropertyPriceHistory> findRecentPriceHistory(@Param("propertyId") Long propertyId);
     
-    @Query("SELECT pph FROM PropertyPriceHistory pph WHERE pph.priceDate = (SELECT MAX(pph2.priceDate) FROM PropertyPriceHistory pph2 WHERE pph2.propertyId = pph.propertyId)")
+    @Query("SELECT pph FROM PropertyPriceHistory pph WHERE pph.priceDate = (SELECT MAX(pph2.priceDate) FROM PropertyPriceHistory pph2 WHERE pph2.property.id = pph.property.id)")
     List<PropertyPriceHistory> findLatestPricesForAllProperties();
 }

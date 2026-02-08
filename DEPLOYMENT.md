@@ -75,29 +75,38 @@ npm install
 创建数据库并执行初始化脚本:
 
 ```bash
-mysql -u root -p
+# 方式一: 使用统一的初始化脚本 (推荐)
+mysql -u root -p < database/init.sql
 
-# 创建数据库
-CREATE DATABASE IF NOT EXISTS financelab_users;
-CREATE DATABASE IF NOT EXISTS financelab_stocks;
-CREATE DATABASE IF NOT EXISTS financelab_realestate;
-CREATE DATABASE IF NOT EXISTS financelab_bank;
-CREATE DATABASE IF NOT EXISTS financelab_mall;
-CREATE DATABASE IF NOT EXISTS financelab_events;
-exit;
-
-# 导入数据表结构
-mysql -u root -p financelab_users < database/01_users.sql
-mysql -u root -p financelab_stocks < database/02_stocks.sql
-mysql -u root -p financelab_realestate < database/03_realestate.sql
-mysql -u root -p financelab_bank < database/04_bank.sql
-mysql -u root -p financelab_mall < database/05_mall.sql
-mysql -u root -p financelab_events < database/06_events.sql
+# 方式二: 按服务分别执行 (如果使用独立数据库)
+mysql -u root -p < database/stock-service.sql
+mysql -u root -p < database/real-estate-service.sql
+mysql -u root -p < database/bank-service.sql
+mysql -u root -p < database/mall-service.sql
+mysql -u root -p < database/06_events.sql
 ```
 
 ### 4. 启动服务
 
-#### 启动后端服务
+#### 方法一：使用启动脚本（推荐）
+
+项目提供了便捷的启动脚本 `run-service.sh`，会自动加载 `.env` 文件中的环境变量：
+
+```bash
+# 启动各个服务（每次一个终端）
+cd /opt/mini-biz-sim
+./run-service.sh user-service         # 启动用户服务
+./run-service.sh stock-service         # 启动股票服务
+./run-service.sh real-estate-service  # 启动房地产服务
+./run-service.sh bank-service           # 启动银行服务
+./run-service.sh mall-service           # 启动商场服务
+./run-service.sh event-service         # 启动事件服务
+./run-service.sh gateway               # 启动网关服务
+```
+
+**重要提示**：请确保 `.env` 文件存在于项目根目录，并且配置了正确的环境变量。
+
+#### 方法二：直接使用Maven启动
 
 ```bash
 # 在新终端中启动各个服务
@@ -208,28 +217,48 @@ backend/gateway/target/gateway-1.0.0.jar
 
 ### 2. 环境变量配置
 
-创建 `.env` 文件配置环境变量:
+项目使用 `.env` 文件管理环境变量。创建项目根目录下的 `.env` 文件：
 
 ```bash
 # 数据库配置
 DB_HOST=localhost
 DB_PORT=3306
-DB_USERNAME=financelab
-DB_PASSWORD=StrongPassword123!
+DB_ROOT_USER=root
+DB_ROOT_PASSWORD=your-database-password
 
-# JWT密钥
-JWT_SECRET=your-super-secret-jwt-key-change-in-production
+# Redis 配置
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DATABASE=0
+
+# JWT配置 - 重要：密钥必须至少32字节（256位）
+JWT_SECRET=YourSecureSecretKeyWithAtLeast32CharactersLengthForHS256
 JWT_EXPIRATION=86400000
 
-# 服务端口
-GATEWAY_PORT=8080
-USER_SERVICE_PORT=8081
-STOCK_SERVICE_PORT=8082
-REAL_ESTATE_SERVICE_PORT=8083
-BANK_SERVICE_PORT=8084
-EVENT_SERVICE_PORT=8085
-MALL_SERVICE_PORT=8086
+# 各服务数据库名称
+DB_NAME_USERS=financelab_users
+DB_NAME_STOCKS=financelab_stocks
+DB_NAME_REALESTATE=financelab_realestate
+DB_NAME_BANK=financelab_bank
+DB_NAME_MALL=financelab_mall
+DB_NAME_EVENTS=financelab_events
+
+# 前端 API 配置
+VITE_API_BASE_URL=http://localhost:8080/api
+VITE_WS_BASE_URL=ws://localhost:8085
 ```
+
+**安全注意事项**：
+- `.env` 文件包含敏感信息，不要提交到版本控制系统
+- 确保 `.gitignore` 文件包含 `.env`
+- 在生产环境中，JWT_SECRET 必须使用强随机密钥（至少32字节）
+- 使用以下命令生成安全的JWT密钥：`openssl rand -base64 32`
+
+**JWT密钥要求**：
+- 长度必须 ≥ 32字节（256位）以符合JWT HMAC-SHA算法安全标准
+- 建议在生产环境使用 `openssl rand -base64 32` 生成随机密钥
+- Gateway和User Service必须使用相同的JWT_SECRET
 
 ### 3. Systemd服务配置
 
@@ -664,12 +693,19 @@ logging:
 
 #### 修改JWT密钥
 ```bash
-# 生成随机密钥
+# 生成随机密钥（32字节，符合HMAC-SHA256要求）
 openssl rand -base64 32
 
-# 在环境变量中设置
-export JWT_SECRET=your-generated-secret-key
+# 在.env文件中设置
+JWT_SECRET=your-generated-secret-key
 ```
+
+**JWT密钥安全规范**：
+- Gateway和User Service必须使用相同的JWT_SECRET
+- 密钥长度必须 ≥ 32字节（256位）
+- 不得使用弱密钥或短密钥（会导致启动失败）
+- 生产环境必须使用强随机密钥
+- 密钥更换会导致所有现有token失效
 
 #### 防火墙配置
 ```bash
@@ -740,13 +776,32 @@ FLUSH PRIVILEGES;
 # 查找占用端口的进程
 lsof -i :8080
 
+# 或使用netstat
+netstat -tlnp | grep 8080
+
 # 杀死进程
 kill -9 <PID>
 
 # 或修改application.yml中的端口配置
 ```
 
-### 3. 内存不足
+### 3. JWT密钥错误
+
+**问题**: `The specified key byte array is 184 bits which is not secure enough for any JWT HMAC-SHA algorithm`
+
+**解决方案**:
+```bash
+# 生成符合要求的密钥（至少32字节）
+openssl rand -base64 32
+
+# 更新.env文件中的JWT_SECRET
+JWT_SECRET=<生成的密钥>
+
+# 确保Gateway和User Service使用相同的JWT_SECRET
+# 重启服务以应用新配置
+```
+
+### 4. 内存不足
 
 **问题**: `OutOfMemoryError: Java heap space`
 
@@ -774,7 +829,30 @@ npm config set registry https://registry.npmmirror.com
 npm install
 ```
 
-### 5. WebSocket连接失败
+### 5. 环境变量未生效
+
+**问题**: 服务启动时无法读取.env文件中的配置
+
+**解决方案**:
+```bash
+# 方法一：使用run-service.sh脚本（推荐）
+cd /opt/mini-biz-sim
+./run-service.sh <service-name>
+
+# 方法二：手动加载环境变量
+cd /opt/mini-biz-sim
+export $(cat .env | grep -v '^#' | xargs)
+cd backend/<service-name>
+mvn spring-boot:run
+
+# 方法三：在启动命令中直接指定环境变量
+cd backend/<service-name>
+export JWT_SECRET=your-secret-key
+export DB_ROOT_PASSWORD=your-password
+mvn spring-boot:run
+```
+
+### 6. WebSocket连接失败
 
 **问题**: 前端无法连接WebSocket
 
@@ -909,15 +987,23 @@ crontab -e
 
 ### A. 环境变量清单
 
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| DB_HOST | 数据库主机 | localhost |
-| DB_PORT | 数据库端口 | 3306 |
-| DB_USERNAME | 数据库用户名 | root |
-| DB_PASSWORD | 数据库密码 | - |
-| JWT_SECRET | JWT密钥 | - |
-| JWT_EXPIRATION | JWT过期时间(毫秒) | 86400000 |
-| GATEWAY_PORT | 网关端口 | 8080 |
+| 变量名 | 说明 | 默认值 | 要求 |
+|--------|------|--------|------|
+| DB_HOST | 数据库主机 | localhost | - |
+| DB_PORT | 数据库端口 | 3306 | - |
+| DB_ROOT_USER | 数据库用户名 | root | - |
+| DB_ROOT_PASSWORD | 数据库密码 | - | 强密码 |
+| JWT_SECRET | JWT密钥 | - | ≥32字节（256位） |
+| JWT_EXPIRATION | JWT过期时间(毫秒) | 86400000 | - |
+| REDIS_HOST | Redis主机 | localhost | - |
+| REDIS_PORT | Redis端口 | 6379 | - |
+| REDIS_PASSWORD | Redis密码 | - | 可选 |
+| DB_NAME_USERS | 用户服务数据库名 | financelab_users | - |
+| DB_NAME_STOCKS | 股票服务数据库名 | financelab_stocks | - |
+| DB_NAME_REALESTATE | 房地产服务数据库名 | financelab_realestate | - |
+| DB_NAME_BANK | 银行服务数据库名 | financelab_bank | - |
+| DB_NAME_MALL | 商场服务数据库名 | financelab_mall | - |
+| DB_NAME_EVENTS | 事件服务数据库名 | financelab_events | - |
 
 ### B. 服务端口分配
 
@@ -964,8 +1050,37 @@ tail -f /var/log/financelab/application.log
 - 文档地址: https://docs.example.com
 - 问题反馈: https://github.com/xxx/issues
 
+### E. 启动脚本使用说明
+
+项目提供了 `run-service.sh` 脚本用于便捷启动服务：
+
+**脚本功能**：
+- 自动加载 `.env` 文件中的环境变量
+- 支持启动各个微服务
+- 提供统一的服务启动入口
+
+**使用方法**：
+```bash
+cd /opt/mini-biz-sim
+./run-service.sh <service-name>
+```
+
+**可用服务**：
+- `gateway` - API网关服务
+- `user-service` - 用户服务
+- `stock-service` - 股票服务
+- `real-estate-service` - 房地产服务
+- `bank-service` - 银行服务
+- `mall-service` - 商场服务
+- `event-service` - 事件服务
+
+**注意事项**：
+- 确保在项目根目录执行脚本
+- 确保 `.env` 文件存在且配置正确
+- 每个服务需要在独立的终端中启动
+
 ---
 
-**文档版本**: 1.0.0
-**最后更新**: 2024-02-06
+**文档版本**: 1.1.0
+**最后更新**: 2026-02-08
 **维护者**: FinanceLab Team
